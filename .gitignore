@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.streamlit/secrets.toml
+*.log
+.DS_Store
+backups/
+test_export.html
+*.html.bak
