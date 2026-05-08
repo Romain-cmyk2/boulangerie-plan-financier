@@ -27,13 +27,16 @@ MIN_INTERVAL_SEC = 5.0
 
 
 def _config():
-    """Lit la config depuis st.secrets. Renvoie None si non configuré."""
+    """Lit la config depuis st.secrets. Renvoie None si non configuré.
+    Capture toute exception : sur Streamlit Cloud sans secrets, l'accès peut
+    lever des erreurs variées selon la version (KeyError, FileNotFoundError,
+    StreamlitSecretNotFoundError, etc.)."""
     try:
         token = st.secrets["GITHUB_TOKEN"]
         repo = st.secrets["GITHUB_REPO"]
         branch = st.secrets.get("GITHUB_BRANCH", "main")
         return token, repo, branch
-    except (KeyError, FileNotFoundError, AttributeError):
+    except Exception:
         return None
 
 

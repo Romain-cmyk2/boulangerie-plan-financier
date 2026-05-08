@@ -46,7 +46,7 @@ def _code_edition() -> str:
     """Code d'édition lu depuis st.secrets, fallback dev = 'mpl2026'."""
     try:
         return st.secrets["CODE_EDITION"]
-    except (KeyError, FileNotFoundError, AttributeError):
+    except Exception:
         return "mpl2026"
 
 
