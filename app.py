@@ -65,10 +65,6 @@ def _init_session():
             st.session_state[k] = v
 
 
-_init_session()
-sync_initial()  # Pull plans depuis GitHub si configuré (idempotent)
-
-
 # ─── Sidebar : auth + navigation + status sync ──────────────────────────────
 
 def _sidebar():
@@ -207,6 +203,8 @@ def _sauver_plan_complet(params: dict):
 # ─── Routeur principal ──────────────────────────────────────────────────────
 
 def main():
+    _init_session()
+    sync_initial()  # Pull plans depuis GitHub si configuré (idempotent, no-op sans secrets)
     _sidebar()
     if st.session_state["page"] == "accueil" or not st.session_state["plan_actif"]:
         render_accueil(
