@@ -106,6 +106,11 @@ def _sidebar():
 
         st.divider()
 
+        # Manuel d'utilisation (toujours accessible)
+        if st.button("📖 Manuel d'utilisation", width='stretch'):
+            st.session_state["page"] = "manuel"
+            st.rerun()
+
         # Navigation
         if st.session_state["plan_actif"]:
             st.markdown(f"**Plan actif** : `{st.session_state['plan_actif']}`")
@@ -206,7 +211,10 @@ def main():
     _init_session()
     sync_initial()  # Pull plans depuis GitHub si configuré (idempotent, no-op sans secrets)
     _sidebar()
-    if st.session_state["page"] == "accueil" or not st.session_state["plan_actif"]:
+    if st.session_state["page"] == "manuel":
+        from views.manuel import render_manuel
+        render_manuel(on_retour=_retour_accueil)
+    elif st.session_state["page"] == "accueil" or not st.session_state["plan_actif"]:
         render_accueil(
             auth_edition=st.session_state["auth_edition"],
             on_open_plan=_ouvrir_plan,
@@ -216,6 +224,11 @@ def main():
         )
     else:
         render_plan_ouvert()
+
+
+def _retour_accueil():
+    st.session_state["page"] = "accueil"
+    st.rerun()
 
 
 def _ouvrir_plan(nom: str):
